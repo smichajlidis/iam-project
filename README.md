@@ -30,10 +30,11 @@ iam-project/
 ```
 
 ## 3. Running the Environment
-1. Make sure ports 80, 8080, and 5432 are free.
+1. Make sure ports 80, 8080, 5000 and 5432 are free.
 2. Add a local domain entry in /etc/hosts:
 ```bash
 127.0.0.1 iam.local
+127.0.0.1 admin.iam.local
 ```
 3. Start containers:
 ```bash
@@ -44,6 +45,8 @@ docker-compose up -d
 docker ps
 ```
 You should see containers:
+
+- app →	port 5000
 - postgres → port 5432
 - keycloak → port 8080 (HTTP, dev mode)
 - nginx → port 80
@@ -58,7 +61,12 @@ Password: admin
 
 In production, use HTTPS and strong passwords.
 
-## 5. Nginx (Reverse Proxy)
+## 5. Admin Panel (Flask)
+
+- Local URL: http://admin.iam.local
+- Configured via Nginx subdomain: requests to admin.iam.local are proxied to the Flask admin app running in Docker (app:5000).
+
+## 6. Nginx (Reverse Proxy)
 
 - All requests to http://iam.local are forwarded to the Keycloak container (proxy_pass http://keycloak:8080/)
 #### Benefits:
@@ -66,7 +74,7 @@ In production, use HTTPS and strong passwords.
 - Ability to add HTTPS, filtering, or load balancing later
 - Client does not need to know Keycloak port or container
 
-## 6. Docker Tips
+## 7. Docker Tips
 
 Enter a container:
 ```bash
@@ -82,7 +90,7 @@ Restart containers:
 docker-compose down
 docker-compose up -d
 ```
-## 7. Security Notes
+## 8. Security Notes
 
 - Do not commit real user data or passwords to the repo
 - Keep .env or any sensitive configuration local
