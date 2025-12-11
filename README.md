@@ -84,6 +84,7 @@ Check logs:
 ```bash
 docker logs iam-project_keycloak_1
 docker logs iam-project_nginx_1
+sudo docker-compose logs -f app
 ```
 Restart containers:
 ```bash
