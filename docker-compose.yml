@@ -5,6 +5,8 @@ services:
     container_name: iam-project_app
     ports:
       - "5000:5000"
+    volumes:
+    - ./app:/app
     networks:
       - iam-network
     depends_on:
