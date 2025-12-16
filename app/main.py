@@ -1,9 +1,10 @@
-from flask import Flask, redirect, request, jsonify
+from flask import Flask, redirect, request, jsonify, session, url_for, render_template
 from werkzeug.middleware.proxy_fix import ProxyFix
 import requests
 from jose import jwt
 
 app = Flask(__name__)
+app.secret_key = "supersecret"
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 CLIENT_ID = "admin-app"
@@ -43,19 +44,26 @@ def callback():
 
     payload = jwt.get_unverified_claims(access_token)
 
+    roles = payload.get("realm_access", {}).get("roles", [])
+
+    role = ""
+
+    preferred_roles = ["edit", "display", "execute"]
+    role = next((r for r in preferred_roles if r in roles), "lack of roles")
+
     user_info = {
         "username": payload.get("preferred_username"),
         "email": payload.get("email"),
         "name": payload.get("name"),
+        "role": role
+    }
+
+    session["user"] = {
+        "username": payload.get("preferred_username"),
         "roles": payload.get("realm_access", {}).get("roles", [])
     }
 
-    return jsonify({
-        "message": "Login successful!",
-        "user_info": user_info,
-        "tokens": tokens
-    })
-
+    return render_template("index.html", user=user_info)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
