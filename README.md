@@ -23,18 +23,19 @@ iam-project/
 ├─ docker-compose.yml         # container definitions: Keycloak, Postgres, Nginx
 ├─ nginx.conf                 # reverse proxy configuration
 ├─ app/                       # IAM admin panel (your web application)
-├─ scripts/                   # automation / mini-IDM scripts
+├─ rms/                	      # Requests Management System (Flask application)
 ├─ sql/                       # example database scripts (audit, provisioning)
 ├─ examples/                  # example CSV/Excel files for import
 └─ README.md
 ```
 
 ## 3. Running the Environment
-1. Make sure ports 80, 8080, 5000 and 5432 are free.
+1. Make sure ports 80, 8080, 8081, 5000 and 5432 are free.
 2. Add a local domain entry in /etc/hosts:
 ```bash
 127.0.0.1 iam.local
 127.0.0.1 admin.iam.local
+127.0.0.1 rms.local
 ```
 3. Start containers:
 ```bash
@@ -46,17 +47,17 @@ docker ps
 ```
 You should see containers:
 
-- app →	port 5000
+- app, rms → port 5000
 - postgres → port 5432
 - keycloak → port 8080 (HTTP, dev mode)
-- nginx → port 80
+- nginx    → port 80
 
 ## 4. Keycloak
 
 - Admin panel: http://localhost:8080 or http://iam.local
 
 #### Default login for development:  
-Username: admin  
+Username: admin
 Password: admin
 
 In production, use HTTPS and strong passwords.
@@ -65,6 +66,11 @@ In production, use HTTPS and strong passwords.
 
 - Local URL: http://admin.iam.local
 - Configured via Nginx subdomain: requests to admin.iam.local are proxied to the Flask admin app running in Docker (app:5000).
+
+## 6. Requests Management System (Flask)
+
+- Local URL: http://rms.local
+- Configured via Nginx subdomain: requests to rms.local are proxied to the Flask rms app running in Docker (rms:5000).
 
 ## 6. Nginx (Reverse Proxy)
 
@@ -99,7 +105,7 @@ docker-compose up -d
 
 ## 8. Next Steps
 
-- Develop IAM admin panel
+- Develop Requests Management System app
 - Automation for provisioning / deprovisioning
 - Audit and reporting
 - Integration with CSV/Excel and Postgres database

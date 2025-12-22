@@ -1,5 +1,18 @@
 version: '3'
 services:
+
+  rms:
+    build: ./rms
+    container_name: rms
+    ports:
+      - "8081:5000"
+    volumes:
+    - ./rms:/rms
+    networks:
+      - iam-network
+    depends_on:
+      - keycloak
+
   app:
     build: ./app
     container_name: app
