@@ -1,9 +1,37 @@
 {% extends 'base.html' %}
 
 {% block head %}
-
+<title>Request Management System</title>
 {% endblock %}
 
 {% block body %}
-<h1>Template</h1>
-{% endblock %}
+<div class="content">
+    <h1>Request Management System</h1>
+
+    <table>
+        <tr>
+            <th>Request</th>
+            <th>Added</th>
+            <th>Actions</th>
+        </tr>
+        {% for request in requests %}
+        <tr>
+            <td>{{ request.request }}</td>
+            <td>{{ request.date_created.date() }}</td>
+            <td>
+                <a href="/delete/{{ request.id }}">Delete</a>
+                <br>
+                <a href="">Modify</a>
+                <br>
+                <a href="">Approve</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <form action="/" method="POST">
+        <input type="text" name="content" id="content">
+        <input type="submit" value="Request">
+    </form>
+</div>
+    {% endblock %}

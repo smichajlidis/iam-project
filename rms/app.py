@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -17,15 +17,38 @@ class RMS(db.Model):
     request = db.Column(db.String(200), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
-    with app.app_context():
-        db.create_all() 
-
     def __repr__(self):
         return '<Request %r>' % self.id
 
-@app.route('/')
+with app.app_context():
+    db.create_all()
+
+@app.route('/', methods=['POST', 'GET'])
 def index():
-    return render_template('index.html')
+    if request.method == 'POST':
+        request_content = request.form['content']
+        new_request = RMS(request=request_content)
+
+        try:
+            db.session.add(new_request)
+            db.session.commit()
+            return redirect('/')
+        except:
+            return 'There was an issue adding your request'
+    else:
+        requests = RMS.query.order_by(RMS.date_created.asc()).all()
+        return render_template('index.html', requests=requests)
+
+@app.route('/delete/<int:id>')
+def delete(id):
+    request_to_delete = RMS.query.get_or_404(id)
+
+    try:
+        db.session.delete(request_to_delete)
+        db.session.commit()
+        return redirect('/')
+    except:
+        return 'There was a problem deleting that request'
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
