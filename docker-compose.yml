@@ -4,6 +4,10 @@ services:
   rms:
     build: ./rms
     container_name: rms
+    environment:
+      - RMS_DB_USERNAME=rms
+      - RMS_DB_PASSWORD=rms
+      - POSTGRES_DB=rms_db
     ports:
       - "8081:5000"
     volumes:
@@ -11,7 +15,7 @@ services:
     networks:
       - iam-network
     depends_on:
-      - keycloak
+      - postgres
 
   app:
     build: ./app
@@ -28,13 +32,14 @@ services:
   postgres:
     image: postgres:15
     environment:
-      POSTGRES_DB: keycloak
-      POSTGRES_USER: keycloak
-      POSTGRES_PASSWORD: keycloak
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - iam-network
 
@@ -42,11 +47,11 @@ services:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak
     environment:
-      DB_VENDOR: POSTGRES
-      DB_ADDR: postgres
-      DB_DATABASE: keycloak
-      DB_USER: keycloak
-      DB_PASSWORD: keycloak
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres
+      KC_DB_URL_DATABASE: keycloak_db
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
@@ -69,7 +74,7 @@ services:
       - iam-network
 
 volumes:
-  pgdata:
+  postgres_data:
 
 networks:
   iam-network:

@@ -1,0 +1,14 @@
+-- RMS
+CREATE DATABASE rms_db;
+CREATE USER rms WITH PASSWORD 'rms';
+GRANT ALL PRIVILEGES ON DATABASE rms_db TO rms;
+\c rms_db
+GRANT ALL PRIVILEGES ON SCHEMA public TO rms;
+
+
+-- KEYCLOAK
+CREATE DATABASE keycloak_db;
+CREATE USER keycloak WITH PASSWORD 'keycloak';
+GRANT ALL PRIVILEGES ON DATABASE keycloak_db TO keycloak;
+\c keycloak_db
+GRANT ALL PRIVILEGES ON SCHEMA public TO keycloak;

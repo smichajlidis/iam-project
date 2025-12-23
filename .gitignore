@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+env/
+venv/
+*.sqlite3
+
+# Docker
+*.log
+docker-compose.override.yml
+**/Dockerfile.*
+**/docker-compose.override.yml
+**/docker-compose.override.yaml
+
+# Docker volumes / persistent data
+postgres_data/
+keycloak_data/
+
+# RMS / App local files
+*.db
+*.sqlite
+*.pyc
+*.pyo
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Nginx / temporary
+*.pid
