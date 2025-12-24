@@ -14,6 +14,7 @@ db = SQLAlchemy(app)
 
 class Request(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    requestor = db.Column(db.String(50), default="Unknown")
     content = db.Column(db.String(50), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     status = db.Column(db.String(15), default="Submitted")

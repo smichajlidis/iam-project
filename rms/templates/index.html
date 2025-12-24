@@ -14,13 +14,17 @@
 
     <table>
         <tr>
-            <th width="500px">Request</th>
+            <th>ID</th>
+            <th width="220px">Requestor</th>
+            <th width="450px">Content</th>
             <th>Added</th>
             <th>Actions</th>
             <th>Status</th>
         </tr>
         {% for request in requests %}
         <tr class="status-{{ request.status | lower | replace(' ', '-') }}">
+            <td>{{ request.id }}</td>
+            <td>{{ request.requestor }}</td>
             <td>{{ request.content }}</td>
             <td>{{ request.date_created.date() }}</td>
             <td>
@@ -43,8 +47,8 @@
         {% endfor %}
     </table>
         {% endif %}
-    <form action="/" method="POST">
-        <input type="text" name="content" id="content">
+    <form id="add-request" action="/" method="POST">
+        <input type="text" name="content" id="content" size="60" maxlength="50">
         <input type="submit" value="Add request">
     </form>
 </div>

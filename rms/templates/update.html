@@ -10,7 +10,8 @@
 
     <div class="form">
         <form action="/update/{{request.id}}" method="POST">
-            <input type="text" name="content" id="content" value="{{request.content}}">
+            <input type="text" name="content" id="content" size="60" maxlength="50" value="{{ request.content }}">
+            <br>
             <input type="submit" value="Update">
         </form>
     </div>

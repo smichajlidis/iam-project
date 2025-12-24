@@ -40,3 +40,7 @@ th, td {
 .status-completed {
     background-color: #cfe2ff;
 }
+
+form#add-request {
+    margin-top: 20px;
+}
