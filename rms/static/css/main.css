@@ -10,9 +10,33 @@ body {
 table {
     margin: 0 auto;
     border-collapse: collapse;
+    table-layout: fixed;
 }
 
 th, td {
     border: 1px solid #000;
     padding: 8px 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.status-submitted {
+    background-color: #f0f0f0;
+}
+
+.status-in-progress {
+    background-color: #fff3cd;
+}
+
+.status-approved {
+    background-color: #d1e7dd;
+}
+
+.status-rejected {
+    background-color: #f8d7da;
+}
+
+.status-completed {
+    background-color: #cfe2ff;
 }

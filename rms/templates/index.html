@@ -14,20 +14,30 @@
 
     <table>
         <tr>
-            <th>Request</th>
+            <th width="500px">Request</th>
             <th>Added</th>
             <th>Actions</th>
+            <th>Status</th>
         </tr>
         {% for request in requests %}
-        <tr>
+        <tr class="status-{{ request.status | lower | replace(' ', '-') }}">
             <td>{{ request.content }}</td>
             <td>{{ request.date_created.date() }}</td>
             <td>
                 <a href="/delete/{{ request.id }}">Delete</a>
                 <br>
-                <a href="/update/{{ request.id }}">Modify</a>
-                <br>
-                <a href="">Approve</a>
+                <a href="/update/{{ request.id }}">Update</a>
+            </td>
+            <td>
+                <form action="/update-status/{{ request.id }}" method="POST">
+                    <select name="status" onchange="this.form.submit()">    
+                        <option value="Submitted" {% if request.status == "Submitted" %} selected {% endif %}>Submitted</option>
+                        <option value="Approved" {% if request.status == "Approved" %} selected {% endif %}>Approved</option>
+                        <option value="Rejected" {% if request.status == "Rejected" %} selected {% endif %}>Rejected</option>
+                        <option value="In progress" {% if request.status == "In progress" %} selected {% endif %}>In progress</option>
+                        <option value="Completed" {% if request.status == "Completed" %} selected {% endif %}>Completed</option>
+                    </select>
+                </form>
             </td>
         </tr>
         {% endfor %}

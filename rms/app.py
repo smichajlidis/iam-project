@@ -14,8 +14,9 @@ db = SQLAlchemy(app)
 
 class Request(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(200), nullable=False)
+    content = db.Column(db.String(50), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    status = db.Column(db.String(15), default="Submitted")
 
     def __repr__(self):
         return '<Request %r>' % self.id
@@ -65,6 +66,13 @@ def update(id):
     
     else:
         return render_template('update.html', request=request_to_update)
+
+@app.route("/update-status/<int:id>", methods=["POST"])
+def update_status(id):
+    request_to_update = Request.query.get_or_404(id)
+    request_to_update.status = request.form["status"]
+    db.session.commit()
+    return redirect("/")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
