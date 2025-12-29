@@ -4,6 +4,7 @@ from datetime import datetime
 from werkzeug.middleware.proxy_fix import ProxyFix
 import requests
 from jose import jwt
+from auth import checks
 
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
@@ -85,7 +86,7 @@ def callback():
 
     session["user"] = {
         "name": payload.get("name"),
-        "roles": payload.get("realm_access", {}).get("roles", [])
+        "roles": payload.get("resource_access", {}).get("rms", {}).get("roles", [])
     }
 
     return redirect('/')
@@ -123,6 +124,12 @@ def update_status(id):
     request_to_update.status = request.form["status"]
     db.session.commit()
     return redirect("/")
+
+@app.context_processor
+def inject_auth_checks():
+    return {
+        "auth": checks
+    }
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
