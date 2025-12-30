@@ -21,16 +21,20 @@
                 <th>Status</th>
             </tr>
             {% for request in requests %}
-                 {% if auth.can_display_own(request) %}
+                 {% if auth.can_display(request) %}
                     <tr class="status-{{ request.status | lower | replace(' ', '-') }}">
                         <td>{{ request.id }}</td>
                         <td>{{ request.requestor }}</td>
                         <td>{{ request.content }}</td>
                         <td>{{ request.date_created.date() }}</td>
                         <td>
-                            <a href="/delete/{{ request.id }}">Delete</a>
-                            <br>
-                            <a href="/update/{{ request.id }}">Update</a>
+                            {% if auth.can_delete_own(request) %}
+                                <a href="/delete/{{ request.id }}">Delete</a>
+                                <br>
+                            {% endif %}
+                            {% if auth.can_update_own(request) %}
+                                <a href="/update/{{ request.id }}">Update</a>
+                            {% endif %}
                         </td>
                         <td>
                             <form action="/update-status/{{ request.id }}" method="POST">
@@ -50,7 +54,7 @@
     {% endif %}
     <form id="add-request" action="/" method="POST">
         <input type="text" name="content" id="content" size="60" maxlength="50">
-        <input type="submit" value="Add request">
+        <input type="submit" value="Add request" {% if not auth.can_create() %} disabled {% endif %}>
     </form>
 </div>
     {% endblock %}
