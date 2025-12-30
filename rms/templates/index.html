@@ -28,11 +28,11 @@
                         <td>{{ request.content }}</td>
                         <td>{{ request.date_created.date() }}</td>
                         <td>
-                            {% if auth.can_delete_own(request) %}
+                            {% if auth.can_delete(request) %}
                                 <a href="/delete/{{ request.id }}">Delete</a>
                                 <br>
                             {% endif %}
-                            {% if auth.can_update_own(request) %}
+                            {% if auth.can_update(request) %}
                                 <a href="/update/{{ request.id }}">Update</a>
                             {% endif %}
                         </td>

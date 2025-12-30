@@ -18,10 +18,12 @@ def can_display(request):
     return ((permissions.REQUEST_DISPLAY_OWN in cu["roles"] and request.requestor == cu["name"])
             or permissions.REQUEST_DISPLAY_ALL in cu["roles"])
 
-def can_delete_own(request):
+def can_delete(request):
     cu = current_user()
-    return permissions.REQUEST_DELETE_OWN in cu["roles"] and request.requestor == cu["name"]
+    return ((permissions.REQUEST_DELETE_OWN in cu["roles"] and request.requestor == cu["name"])
+            or permissions.REQUEST_DELETE_ALL in cu["roles"])
 
-def can_update_own(request):
+def can_update(request):
     cu = current_user()
-    return permissions.REQUEST_UPDATE_OWN in cu["roles"] and request.requestor == cu["name"]
+    return ((permissions.REQUEST_UPDATE_OWN in cu["roles"] and request.requestor == cu["name"])
+            or permissions.REQUEST_UPDATE_ALL in cu["roles"])
