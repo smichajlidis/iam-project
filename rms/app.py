@@ -49,6 +49,7 @@ def index():
     else:
         requests = Request.query.order_by(Request.date_created.asc()).all()
         return render_template('index.html', requests=requests)
+    #    return jsonify(access_token=session["user"]["access_token"], id_token=session["user"]["access_token"])
 
 @app.route('/login')
 def login():
@@ -78,15 +79,20 @@ def callback():
     )
     tokens = token_response.json()
     access_token = tokens.get("access_token")
+    id_token = tokens.get("id_token")
 
-    if not access_token:
+    if not access_token or not id_token:
         return f"Unable to download token: {tokens}", 400
 
-    payload = jwt.get_unverified_claims(access_token)
+    payload_access_token = jwt.get_unverified_claims(access_token)
+    payload_id_token = jwt.get_unverified_claims(id_token)
 
     session["user"] = {
-        "name": payload.get("name"),
-        "roles": payload.get("resource_access", {}).get("rms", {}).get("roles", [])
+        "name": payload_access_token.get("name"),
+        "roles": payload_access_token.get("resource_access", {}).get("rms", {}).get("roles", []),
+        "subordinates": payload_id_token.get("subordinates", []),
+        "access_token": payload_access_token,
+        "id_token": payload_id_token
     }
 
     return redirect('/')

@@ -6,7 +6,8 @@ def current_user():
     return {
         "user": user,
         "roles": user.get("roles", []),
-        "name": user.get("name")
+        "name": user.get("name"),
+        "subordinates": user.get("subordinates", [])
     }
 
 def can_create():
@@ -16,6 +17,7 @@ def can_create():
 def can_display(request):
     cu = current_user()
     return ((permissions.REQUEST_DISPLAY_OWN in cu["roles"] and request.requestor == cu["name"])
+            or (permissions.REQUEST_DISPLAY_SUBORDINATES in cu["roles"] and request.requestor in cu["subordinates"])
             or permissions.REQUEST_DISPLAY_ALL in cu["roles"])
 
 def can_delete(request):
