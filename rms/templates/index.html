@@ -38,12 +38,34 @@
                         </td>
                         <td>
                             <form action="/update-status/{{ request.id }}" method="POST">
-                                <select name="status" onchange="this.form.submit()">    
-                                    <option value="Submitted" {% if request.status == "Submitted" %} selected {% endif %}>Submitted</option>
-                                    <option value="Approved" {% if request.status == "Approved" %} selected {% endif %}>Approved</option>
-                                    <option value="Rejected" {% if request.status == "Rejected" %} selected {% endif %}>Rejected</option>
-                                    <option value="In progress" {% if request.status == "In progress" %} selected {% endif %}>In progress</option>
-                                    <option value="Completed" {% if request.status == "Completed" %} selected {% endif %}>Completed</option>
+                                <select name="status" onchange="this.form.submit()">
+                                    {% if request.status == "Submitted" %}    
+                                        <option value="Submitted" selected>Submitted</option>
+                                        {% if auth.can_change_status_manager_scope(request) %}
+                                            <option value="Approved">Approved</option>
+                                            <option value="Rejected">Rejected</option>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if request.status == "Approved" %}
+                                        <option value="Approved" selected>Approved</option>
+                                        {% if auth.can_change_status_support_scope(request) %}
+                                            <option value="In progress">In progress</option>
+                                            <option value="Rejected">Rejected</option>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if request.status == "Rejected" %}
+                                        <option value="Rejected" selected>Rejected</option>
+                                    {% endif %}
+                                    {% if request.status == "In progress" %}
+                                        <option value="In progress" selected>In progress</option>
+                                        {% if auth.can_change_status_support_scope(request) %}
+                                            <option value="Completed">Completed</option>
+                                            <option value="Rejected">Rejected</option>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if request.status == "Completed" %}
+                                        <option value="Completed" selected>Completed</option>
+                                    {% endif %}
                                 </select>
                             </form>
                         </td>

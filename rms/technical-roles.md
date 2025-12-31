@@ -3,33 +3,30 @@
 ## Own (own request)
 
 ```
-request:create		Allows creating a new request
-request:display:own	Allows viewing the user's own requests.
-request:update:own	Allows modifying the user's own requests.
-request:delete:own	Allows deleting the user's own requests.
+request:create							Allows creating a new request
+request:display:own						Allows viewing the user's own requests.
+request:update:own						Allows modifying the user's own requests.
+request:delete:own						Allows deleting the user's own requests.
 ```
 ## Subordinates (subordinates' requests)
 
 ```
-request:display:subordinates	Allows viewing requests of subordinate users.
-request:approve:subordinates	Allows approving requests of subordinates.
-request:reject:subordinates	Allows rejecting requests of subordinates.
+request:display:subordinates			Allows viewing requests of subordinate users.
+request:change_status:manager_scope		Allows changing status: submitted → approved or rejected requests of subordinates.
 ```
 ## Approved only (e.g., for support)
 
 ```
-request:display:approved_only
-Allows viewing requests that have been approved by a manager (status neither 'submitted' nor 'rejected').
-request:change_status:supported_scope
-Allows changing status: approved → in_progress → completed
+request:display:approved_only			Allows viewing requests that have been approved by a manager (status neither 'submitted' nor 'rejected').
+request:change_status:supported_scope	Allows changing status: approved → in_progress → completed
 ```
 ## All (full access / administrative)
 
 ```
-request:display:all	Allows viewing all requests in the system.
-request:update:all	Allows updating any request.
-request:delete:all	Allows deleting any request.
-request:change_status:all	Allows changing the status of any request (e.g., in progress, completed).
+request:display:all						Allows viewing all requests in the system.
+request:update:all						Allows updating any request.
+request:delete:all						Allows deleting any request.
+request:change_status:all				Allows changing the status of any request (e.g., in progress, completed).
 ```
 ## Practical notes
 
