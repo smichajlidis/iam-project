@@ -18,6 +18,7 @@ def can_display(request):
     cu = current_user()
     return ((permissions.REQUEST_DISPLAY_OWN in cu["roles"] and request.requestor == cu["name"])
             or (permissions.REQUEST_DISPLAY_SUBORDINATES in cu["roles"] and request.requestor in cu["subordinates"])
+            or (permissions.REQUEST_CHANGE_STATUS_SUPPORTED_SCOPE in cu["roles"] and (request.status != "Submitted" and request.status != "Rejected"))
             or permissions.REQUEST_DISPLAY_ALL in cu["roles"])
 
 def can_delete(request):
