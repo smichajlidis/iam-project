@@ -28,7 +28,7 @@ def can_delete(request):
 
 def can_update(request):
     cu = current_user()
-    return ((permissions.REQUEST_UPDATE_OWN in cu["roles"] and request.requestor == cu["name"])
+    return ((permissions.REQUEST_UPDATE_OWN in cu["roles"] and request.requestor == cu["name"] and request.status == "Submitted")
             or permissions.REQUEST_UPDATE_ALL in cu["roles"])
 
 def can_change_status_manager_scope(request):
@@ -38,5 +38,5 @@ def can_change_status_manager_scope(request):
 
 def can_change_status_support_scope(request):
     cu = current_user()
-    return ((permissions.REQUEST_CHANGE_STATUS_SUPPORTED_SCOPE in cu["roles"] and (request.status != "submitted" and request.status != "rejected"))
+    return ((permissions.REQUEST_CHANGE_STATUS_SUPPORTED_SCOPE in cu["roles"] and (request.status != "Submitted" and request.status != "Rejected"))
             or (permissions.REQUEST_CHANGE_STATUS_ALL in cu["roles"]))

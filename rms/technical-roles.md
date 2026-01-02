@@ -39,8 +39,8 @@ request:change_status:all				Allows changing the status of any request (e.g., in
 Requestor		request:create, request:display:own,
 			request:update:own, request:delete:own
 
-Manager			request:display:subordinates, request:approve:subordinates,
-			request:reject:subordinates
+Manager			request:display:subordinates,
+			request:change_status:manager_scope
 
 Support			request:display:approved_only,
 			request:change_status:supported_scope

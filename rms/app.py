@@ -101,6 +101,9 @@ def callback():
 def delete(id):
     request_to_delete = Request.query.get_or_404(id)
 
+    if not checks.can_delete(request_to_delete):
+        return "Forbidden", 403
+
     try:
         db.session.delete(request_to_delete)
         db.session.commit()
@@ -111,6 +114,9 @@ def delete(id):
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
     request_to_update = Request.query.get_or_404(id)
+
+    if not checks.can_update(request_to_update):
+        return "Forbidden", 403
 
     if request.method == 'POST':
         request_to_update.content = request.form['content']
@@ -127,6 +133,10 @@ def update(id):
 @app.route("/update-status/<int:id>", methods=["POST"])
 def update_status(id):
     request_to_update = Request.query.get_or_404(id)
+
+    if not (checks.can_change_status_support_scope(request_to_update) and checks.can_change_status_manager_scope(request_to_update)):
+        return "Forbidden", 403
+
     request_to_update.status = request.form["status"]
     db.session.commit()
     return redirect("/")
