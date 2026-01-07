@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Human Resources System</title>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    <h1>Human Resources System</h1>
+
+    {% if employees|length < 1  %}
+        <h4>There are no employees</h4>
+    {% else %}
+        <table>
+            <tr>
+                <th>userID</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Valid from</th>
+                <th>Valid to</th>
+                <th>Identity status</th>
+                <th>Job title name</th>
+                <th>Manager</th>
+            </tr>
+            {% for employee in employees %}
+                    <tr class="status-{{ employee.user_id | lower | replace(' ', '-') }}">
+                        <td>{{ employee.user_id }}</td>
+                        <td>{{ employee.first_name }}</td>
+                        <td>{{ employee.last_name }}</td>
+                        <td>{{ employee.valid_from }}</td>
+                        <td>{{ employee.valid_to }}</td>
+                        <td>{{ employee.identity_status }}</td>
+                        <td>{{ employee.job_title_name }}</td>
+                        <td>{{ employee.manager }}</td>
+                    </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    </div>
+{% endblock %}
