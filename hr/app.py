@@ -25,7 +25,6 @@ class Employee(db.Model):
     identity_status = db.Column(db.Boolean)
     job_title_name = db.Column(db.String(20), nullable=False)
     manager = db.Column(db.String(20))
-    status = db.Column(db.String(15), default="Submitted")
 
     def __repr__(self):
         return '<Employee %r>' % self.id
@@ -54,7 +53,7 @@ def login():
         )
     return redirect(auth_url)
 
-@app.route("/callback")
+@app.route('/callback')
 def callback():
     code = request.args.get("code")
     if not code:
@@ -87,6 +86,10 @@ def callback():
     }
 
     return redirect('/')
+
+@app.route('/create')
+def create():
+     return render_template('create.html')
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)

@@ -8,9 +8,8 @@
 <div class="content">
     <h1>Human Resources System</h1>
 
-    {% if employees|length < 1  %}
-        <h4>There are no employees</h4>
-    {% else %}
+    {% if employees|length < 1 %} <h4>There are no employees</h4>
+        {% else %}
         <table>
             <tr>
                 <th>userID</th>
@@ -23,18 +22,21 @@
                 <th>Manager</th>
             </tr>
             {% for employee in employees %}
-                    <tr class="status-{{ employee.user_id | lower | replace(' ', '-') }}">
-                        <td>{{ employee.user_id }}</td>
-                        <td>{{ employee.first_name }}</td>
-                        <td>{{ employee.last_name }}</td>
-                        <td>{{ employee.valid_from }}</td>
-                        <td>{{ employee.valid_to }}</td>
-                        <td>{{ employee.identity_status }}</td>
-                        <td>{{ employee.job_title_name }}</td>
-                        <td>{{ employee.manager }}</td>
-                    </tr>
+            <tr class="status-{{ employee.user_id | lower | replace(' ', '-') }}">
+                <td>{{ employee.user_id }}</td>
+                <td>{{ employee.first_name }}</td>
+                <td>{{ employee.last_name }}</td>
+                <td>{{ employee.valid_from }}</td>
+                <td>{{ employee.valid_to }}</td>
+                <td>{{ employee.identity_status }}</td>
+                <td>{{ employee.job_title_name }}</td>
+                <td>{{ employee.manager }}</td>
+            </tr>
             {% endfor %}
         </table>
-    {% endif %}
-    </div>
+        {% endif %}
+
+        <a href="/create">Create new employee</a>
+
+</div>
 {% endblock %}

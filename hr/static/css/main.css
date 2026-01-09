@@ -20,3 +20,19 @@ th, td {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 10px 20px;
+    align-items: center;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.form-submit {
+    grid-column: 1 / -1;
+    justify-self: center;
+    margin-top: 5px;
+    padding: 6px 20px;
+}
