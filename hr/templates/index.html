@@ -26,8 +26,8 @@
                 <td>{{ employee.user_id }}</td>
                 <td>{{ employee.first_name }}</td>
                 <td>{{ employee.last_name }}</td>
-                <td>{{ employee.valid_from }}</td>
-                <td>{{ employee.valid_to }}</td>
+                <td>{{ employee.valid_from.strftime('%Y-%m-%d') }}</td>
+                <td>{{ employee.valid_to.strftime('%Y-%m-%d') }}</td>
                 <td>{{ employee.identity_status }}</td>
                 <td>{{ employee.job_title_name }}</td>
                 <td>{{ employee.manager }}</td>

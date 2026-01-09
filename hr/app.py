@@ -22,7 +22,7 @@ class Employee(db.Model):
     last_name = db.Column(db.String(20), nullable=False)
     valid_from = db.Column(db.DateTime, default=datetime.utcnow)
     valid_to = db.Column(db.DateTime)
-    identity_status = db.Column(db.Boolean)
+    identity_status = db.Column(db.Boolean, default=True)
     job_title_name = db.Column(db.String(20), nullable=False)
     manager = db.Column(db.String(20))
 
@@ -87,9 +87,47 @@ def callback():
 
     return redirect('/')
 
-@app.route('/create')
+@app.route('/create', methods=["GET", "POST"])
 def create():
-     return render_template('create.html')
+
+    if request.method == 'POST':
+
+        valid_from = ""
+        valid_from_str = request.form.get('valid_from')
+        if not valid_from_str:
+            valid_from = datetime.utcnow()
+        else:
+            valid_from = datetime.strptime(valid_from_str, '%Y-%m-%d')
+
+        valid_to = ""
+        valid_to_str = request.form.get('valid_to')
+        if valid_to_str:
+            valid_to = datetime.strptime(valid_to_str, '%Y-%m-%d')
+        else:
+            valid_to = datetime.strptime('9999-12-31', '%Y-%m-%d')
+ 
+
+        identity_status = True if request.form.get('identity_status') else False
+
+        new_employee = Employee(
+            user_id = request.form['user_id'],
+            first_name = request.form['first_name'],
+            last_name = request.form['last_name'],
+            valid_from = valid_from,
+            valid_to = valid_to,
+            identity_status = identity_status,
+            job_title_name = request.form['job_title_name'],
+            manager = request.form['manager'])
+        
+        try:
+            db.session.add(new_employee)
+            db.session.commit()
+            return redirect('/')
+        except:
+            return 'There was an issue adding new employee'
+        
+    else:   
+        return render_template('create.html')
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
