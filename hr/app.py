@@ -129,5 +129,19 @@ def create():
     else:   
         return render_template('create.html')
 
+@app.route('/change-status/<string:user_id>', methods=["GET", "POST"])
+def update_status(user_id):
+    
+    employee_to_update = Employee.query.get_or_404(user_id)
+
+    if request.method == 'POST':
+        employee_to_update.identity_status = not employee_to_update.identity_status
+
+    try:
+        db.session.commit()
+        return redirect('/')
+    except:
+        return 'There was a problem changing status that employee'
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)

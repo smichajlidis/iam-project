@@ -20,9 +20,10 @@
                 <th>Identity status</th>
                 <th>Job title name</th>
                 <th>Manager</th>
+                <th>Actions</th>
             </tr>
             {% for employee in employees %}
-            <tr class="status-{{ employee.user_id | lower | replace(' ', '-') }}">
+            <tr>
                 <td>{{ employee.user_id }}</td>
                 <td>{{ employee.first_name }}</td>
                 <td>{{ employee.last_name }}</td>
@@ -31,11 +32,18 @@
                 <td>{{ employee.identity_status }}</td>
                 <td>{{ employee.job_title_name }}</td>
                 <td>{{ employee.manager }}</td>
+                <td>
+                    <form action="/change-status/{{ employee.user_id }}" method="POST" style="display:inline">
+                        <button type="Submit">Change status</button>
+                    </form>
+                    <br>
+                    <a href="">Update</a>
+                </td>
             </tr>
             {% endfor %}
         </table>
         {% endif %}
-
+        <br>
         <a href="/create">Create new employee</a>
 
 </div>
