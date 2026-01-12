@@ -18,7 +18,7 @@
                 <th>Valid from</th>
                 <th>Valid to</th>
                 <th>Identity status</th>
-                <th>Job title name</th>
+                <th>Business role</th>
                 <th>Manager</th>
                 <th>Actions</th>
             </tr>
@@ -30,7 +30,7 @@
                 <td>{{ employee.valid_from.strftime('%Y-%m-%d') }}</td>
                 <td>{{ employee.valid_to.strftime('%Y-%m-%d') }}</td>
                 <td>{{ employee.identity_status }}</td>
-                <td>{{ employee.job_title_name }}</td>
+                <td>{{ employee.business_role }}</td>
                 <td>{{ employee.manager }}</td>
                 <td>
                     <form action="/change-status/{{ employee.user_id }}" method="POST" style="display:inline">

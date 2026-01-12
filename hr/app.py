@@ -23,7 +23,7 @@ class Employee(db.Model):
     valid_from = db.Column(db.DateTime, default=datetime.utcnow)
     valid_to = db.Column(db.DateTime)
     identity_status = db.Column(db.Boolean, default=True)
-    job_title_name = db.Column(db.String(20), nullable=False)
+    business_role = db.Column(db.String(20))
     manager = db.Column(db.String(20))
 
     def __repr__(self):
@@ -116,7 +116,7 @@ def create():
             valid_from = valid_from,
             valid_to = valid_to,
             identity_status = identity_status,
-            job_title_name = request.form['job_title_name'],
+            business_role = request.form['business_role'],
             manager = request.form['manager'])
         
         try:
