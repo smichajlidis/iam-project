@@ -33,12 +33,16 @@
                 <td>{{ employee.business_role }}</td>
                 <td>{{ employee.manager }}</td>
                 <td>
-                    <form action="/change-status/{{ employee.user_id }}" method="POST" style="display:inline">
+                    <form action="/change-status/{{ employee.user_id }}" method="POST" class="button-form">
                         <button type="Submit">Change status</button>
                     </form>
-                    <br>
-                    <form action="/update/{{ employee.user_id }}" style="display:inline">
+
+                    <form action="/update/{{ employee.user_id }}" class="button-form">
                         <button type="Submit">Update</button>
+                    </form>
+
+                    <form action="/delete/{{ employee.user_id }}" class="button-form">
+                        <button type="Submit">Delete</button>
                     </form>
                 </td>
             </tr>

@@ -182,5 +182,16 @@ def update(user_id):
     else:
         return render_template('update.html', employee=employee)
 
+@app.route('/delete/<string:user_id>', methods=["GET", "POST"])
+def delete(user_id):
+    employee = Employee.query.get_or_404(user_id)
+
+    try:
+        db.session.delete(employee)
+        db.session.commit()
+        return redirect('/')
+    except:
+        return 'There was a problem deleting that employee'
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
