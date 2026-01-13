@@ -143,5 +143,44 @@ def update_status(user_id):
     except:
         return 'There was a problem changing status that employee'
 
+@app.route('/update/<string:user_id>', methods=["GET", "POST"])
+def update(user_id):
+
+    employee = Employee.query.get_or_404(user_id)
+
+    if request.method == 'POST': 
+
+        valid_from = ""
+        valid_from_str = request.form.get('valid_from')
+        if not valid_from_str:
+            valid_from = datetime.utcnow()
+        else:
+            valid_from = datetime.strptime(valid_from_str, '%Y-%m-%d')
+
+        valid_to = ""
+        valid_to_str = request.form.get('valid_to')
+        if valid_to_str:
+            valid_to = datetime.strptime(valid_to_str, '%Y-%m-%d')
+        else:
+            valid_to = datetime.strptime('9999-12-31', '%Y-%m-%d')
+ 
+        identity_status = True if request.form.get('identity_status') else False
+
+        employee.first_name = request.form['first_name']
+        employee.last_name = request.form['last_name']
+        employee.valid_to = valid_to
+        employee.identity_status = identity_status
+        employee.business_role = request.form['business_role']
+        employee.manager = request.form['manager']
+        
+        try:
+            db.session.commit()
+            return redirect('/')
+        except:
+            return 'There was an issue updating new employee'
+        
+    else:
+        return render_template('update.html', employee=employee)
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
