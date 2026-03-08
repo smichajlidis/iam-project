@@ -4,6 +4,7 @@ from datetime import datetime
 from werkzeug.middleware.proxy_fix import ProxyFix
 import requests
 from jose import jwt
+from auth import checks
 
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
