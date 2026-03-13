@@ -56,6 +56,7 @@ def login():
 
 @app.route('/callback')
 def callback():
+
     code = request.args.get("code")
     if not code:
         return "Unable to receive authorization code", 400
@@ -81,7 +82,7 @@ def callback():
 
     session["user"] = {
         "name": payload_access_token.get("name"),
-        "roles": payload_access_token.get("resource_access", {}).get("rms", {}).get("roles", []),
+        "roles": payload_access_token.get("resource_access", {}).get("hr", {}).get("roles", []),
         "access_token": payload_access_token,
         "id_token": payload_id_token
     }
@@ -90,6 +91,9 @@ def callback():
 
 @app.route('/create', methods=["GET", "POST"])
 def create():
+
+    if not checks.can_create():
+        return "Forbidden", 403
 
     if request.method == 'POST':
 
@@ -133,6 +137,9 @@ def create():
 @app.route('/change-status/<string:user_id>', methods=["GET", "POST"])
 def update_status(user_id):
     
+    if not checks.can_change_status():
+        return "Forbidden", 403
+
     employee_to_update = Employee.query.get_or_404(user_id)
 
     if request.method == 'POST':
@@ -146,6 +153,9 @@ def update_status(user_id):
 
 @app.route('/update/<string:user_id>', methods=["GET", "POST"])
 def update(user_id):
+
+    if not checks.can_update():
+        return "Forbidden", 403
 
     employee = Employee.query.get_or_404(user_id)
 
@@ -185,6 +195,10 @@ def update(user_id):
 
 @app.route('/delete/<string:user_id>', methods=["GET", "POST"])
 def delete(user_id):
+
+    if not checks.can_delete():
+        return "Forbidden", 403
+
     employee = Employee.query.get_or_404(user_id)
 
     try:
@@ -193,6 +207,12 @@ def delete(user_id):
         return redirect('/')
     except:
         return 'There was a problem deleting that employee'
+
+@app.context_processor
+def inject_auth_checks():
+    return {
+        "auth": checks
+    }
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)

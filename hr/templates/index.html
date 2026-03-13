@@ -8,8 +8,9 @@
 <div class="content">
     <h1>Human Resources System</h1>
 
+    {% if auth.can_display() %}
     {% if employees|length < 1 %} <h4>There are no employees</h4>
-        {% else %}
+    {% else %}
         <table>
             <tr>
                 <th>userID</th>
@@ -23,6 +24,7 @@
                 <th>Actions</th>
             </tr>
             {% for employee in employees %}
+
             <tr>
                 <td>{{ employee.user_id }}</td>
                 <td>{{ employee.first_name }}</td>
@@ -33,24 +35,31 @@
                 <td>{{ employee.business_role }}</td>
                 <td>{{ employee.manager }}</td>
                 <td>
+                    {% if auth.can_change_status() %}
                     <form action="/change-status/{{ employee.user_id }}" method="POST" class="button-form">
                         <button type="Submit">Change status</button>
                     </form>
-
+                    {% endif %}
+                    {% if auth.can_update() %}
                     <form action="/update/{{ employee.user_id }}" class="button-form">
                         <button type="Submit">Update</button>
                     </form>
-
+                    {% endif %}
+                    {% if auth.can_delete() %}
                     <form action="/delete/{{ employee.user_id }}" class="button-form">
                         <button type="Submit">Delete</button>
                     </form>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}
+            {% endif %}
+            
         </table>
-        {% endif %}
         <br>
-        <a href="/create">Create new employee</a>
-
+        <a href="/create" {% if not auth.can_create() %} disabled {% endif %}>Create new employee</a>
+    {% else %}
+    <h3 style="color:red">!! You are not authorized !!</h3>
+    {% endif %}
 </div>
 {% endblock %}

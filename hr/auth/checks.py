@@ -6,7 +6,7 @@ def current_user():
     return {
         "user": user,
         "roles": user.get("roles", []),
-        "name": user.get("name"),
+        "name": user.get("name")
     }
 
 def can_create():
