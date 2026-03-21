@@ -10,6 +10,11 @@ def current_user():
         "subordinates": user.get("subordinates", [])
     }
 
+def get_name():
+    cu = current_user()
+    return cu["name"]
+    
+
 def can_create():
     cu = current_user()
     return permissions.REQUEST_CREATE in cu["roles"]
