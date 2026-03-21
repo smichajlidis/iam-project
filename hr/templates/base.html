@@ -8,6 +8,10 @@
     {% block head %}{% endblock %}
 </head>
 <body>
+    <div class="header">
+        <h1>Human Resources System</h1>
+        <p>Logged in as {{ auth.get_name() }}</p>
+    </div>
     {% block body %}{% endblock %}
 </body>
 </html>

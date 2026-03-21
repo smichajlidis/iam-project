@@ -6,8 +6,6 @@
 
 {% block body %}
 <div class="content">
-    <h1>Request Management System</h1>
-    <h3>Logged in as {{ auth.get_name() }}</h3>
     {% if requests|length < 1  %}
         <h4>There are no requests</h4>
     {% else %}
