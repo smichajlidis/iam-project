@@ -1,6 +1,6 @@
 # IAM Project
 
-This repository contains code and configuration for a local development environment for an IAM system (Keycloak + admin panel + nginx reverse proxy).  
+This repository contains code and configuration for a local development environment for an IAM system (Keycloak + nginx reverse proxy).  
 
 > Note: This environment is for educational and testing purposes only (development mode).  
 
@@ -21,91 +21,102 @@ docker-compose --version
 ```
 iam-project/
 ├─ docker-compose.yml         # container definitions: Keycloak, Postgres, Nginx
-├─ nginx.conf                 # reverse proxy configuration
-├─ app/                       # IAM admin panel (your web application)
+├─ nginx.conf                 # reverse proxy configuration                       
 ├─ rms/                	      # Requests Management System (Flask application)
-├─ sql/                       # example database scripts (audit, provisioning)
-├─ examples/                  # example CSV/Excel files for import
+├─ postgres/                  # database scripts
 └─ README.md
 ```
 
-## 3. Running the Environment
-1. Make sure ports 80, 8080, 8081, 5000 and 5432 are free.
-2. Add a local domain entry in /etc/hosts:
+## 3. Running the environment
+### 3.1 Make sure ports 80, 8080, 8081 and 5432 are free.
+### 3.2 Add a local domain entry in /etc/hosts:
 ```bash
 127.0.0.1 iam.local
-127.0.0.1 admin.iam.local
 127.0.0.1 rms.local
 ```
-3. Start containers:
+### 3.3 Enter the project's directory and start containers:
 ```bash
 docker-compose up -d
 ```
-4. Check status:
+### 3.4 Check status:
 ```bash
 docker ps
 ```
 You should see containers:
+```
+rms         8081:5000
+postgres    5432:5432
+keycloak    8080:8080
+nginx       80:80
+```
+## 4. Configuring Keycloak
+#### 4.1 Access the Keycloak Admin Console
 
-- app, rms → port 5000
-- postgres → port 5432
-- keycloak → port 8080 (HTTP, dev mode)
-- nginx    → port 80
+- Admin panel: http://iam.local or http://localhost:8080
 
-## 4. Keycloak
-
-- Admin panel: http://localhost:8080 or http://iam.local
-
-#### Default login for development:  
-Username: admin
+**Default login:**  
+```
+Username: admin  
 Password: admin
-
-In production, use HTTPS and strong passwords.
-
-## 5. Admin Panel (Flask)
-
-- Local URL: http://admin.iam.local
-- Configured via Nginx subdomain: requests to admin.iam.local are proxied to the Flask admin app running in Docker (app:5000).
-
-## 6. Requests Management System (Flask)
-
-- Local URL: http://rms.local
-- Configured via Nginx subdomain: requests to rms.local are proxied to the Flask rms app running in Docker (rms:5000).
-
-## 6. Nginx (Reverse Proxy)
-
-- All requests to http://iam.local are forwarded to the Keycloak container (proxy_pass http://keycloak:8080/)
-#### Benefits:
-- Clean local URL
-- Ability to add HTTPS, filtering, or load balancing later
-- Client does not need to know Keycloak port or container
-
-## 7. Docker Tips
-
-Enter a container:
-```bash
-docker exec -it iam-project_keycloak_1 bash
 ```
-Check logs:
-```bash
-docker logs iam-project_keycloak_1
-docker logs iam-project_nginx_1
-sudo docker-compose logs -f app
+#### 4.2 Create new realm
 ```
-Restart containers:
-```bash
-docker-compose down
-docker-compose up -d
+name: 	iam-project
 ```
-## 8. Security Notes
+#### 4.3 Create new client
+```
+Client type:		OpenID Connect
+Client ID:		rms
+Authentication flow:	Standard flow
+Root URL: 		http://rms.local
+Valid redirect URIs:	http://rms.local/callback
+Web origins:		http://rms.local
+```
+#### 4.4 Add roles to the client
+Technical roles are defined in `/rms/technical-roles.md`.
+Create the roles listed in that file.
+#### 4.5 Add users and assign the appropriate roles
+For testing purposes:  
+| Name | Username | Business role |
+|---|---|---|
+| Jan Nowak | nowak | Requestor |
+| Anna Kowalska | kowalska | Manager |
+| Piotr Wiśniewski | wisniewski | Support |
+| Admin Admin | admin | Admin |
+#### 4.6 Add Jan Nowak as Anna Kowalska subordinate
+##### 4.6.1 Realm settings -> User profile -> Create attribute "subordinates"  
+##### 4.6.2 Client scopes -> profile -> Mappers -> add mapper -> By configuration -> User Attribute:
+```
+Name:			subordinates
+User Attribute:		subordinates
+Token Claim Name:	subordinates
+Add to ID token:      	ON
+Add to access token:  	ON
+Add to userinfo:      	ON
+```
+##### 4.6.3 Add "Jan Nowak" as kowalska's subordinate
+Open **Users → Anna Kowalska → Attributes** and set:
 
-- Do not commit real user data or passwords to the repo
-- Keep .env or any sensitive configuration local
-- Public repo is suitable for educational/demonstration purposes
+subordinates = Jan Nowak
+### 5. Testing
+### 5.1 Access RMS
+Open:
 
-## 8. Next Steps
+- [http://rms.local](http://rms.local)
 
-- Develop Requests Management System app
-- Automation for provisioning / deprovisioning
-- Audit and reporting
-- Integration with CSV/Excel and Postgres database
+The application should redirect unauthenticated users to Keycloak.
+
+### 5.2 Test user roles
+
+Use a separate private/incognito browser window for each user to avoid reusing the existing Keycloak session.
+
+Test the following accounts:
+
+For each test:
+
+1. Open a new private/incognito browser window.
+2. Open `http://rms.local`.
+3. Log in using the credentials of the selected user.
+4. Verify that the user has the expected permissions and access.
+5. Close the private window before testing another user.
+

@@ -1,22 +1,6 @@
 version: '3'
 services:
 
-  hr:
-    build: ./hr
-    container_name: hr
-    environment:
-      - HR_DB_USERNAME=hr
-      - HR_DB_PASSWORD=hr
-      - POSTGRES_DB=hr_db
-    ports:
-      - "8082:5000"
-    volumes:
-      - ./hr:/hr
-    networks:
-      - iam-network
-    depends_on:
-      - postgres
-
   rms:
     build: ./rms
     container_name: rms
@@ -33,20 +17,9 @@ services:
     depends_on:
       - postgres
 
-  app:
-    build: ./app
-    container_name: app
-    ports:
-      - "5000:5000"
-    volumes:
-    - ./app:/app
-    networks:
-      - iam-network
-    depends_on:
-      - keycloak
-
   postgres:
     image: postgres:15
+    container_name: postgres
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
@@ -80,6 +53,7 @@ services:
 
   nginx:
     image: nginx:latest
+    container_name: nginx
     ports:
       - "80:80"
     volumes:

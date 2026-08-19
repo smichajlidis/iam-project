@@ -1,5 +1,0 @@
-EMPLOYEE_CREATE = "employee:create"
-EMPLOYEE_DISPLAY = "employee:display"
-EMPLOYEE_CHANGE_STATUS = "employee:change_status"
-EMPLOYEE_DELETE = "employee:delete"
-EMPLOYEE_UPDATE = "employee:update"
