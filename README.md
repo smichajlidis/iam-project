@@ -65,12 +65,12 @@ name: 	iam-project
 ```
 #### 4.3 Create new client
 ```
-Client type:		OpenID Connect
-Client ID:		rms
+Client type:    		OpenID Connect
+Client ID:      		rms
 Authentication flow:	Standard flow
-Root URL: 		http://rms.local
+Root URL: 	        	http://rms.local
 Valid redirect URIs:	http://rms.local/callback
-Web origins:		http://rms.local
+Web origins:	    	http://rms.local
 ```
 #### 4.4 Add roles to the client
 Technical roles are defined in `/rms/technical-roles.md`.
@@ -88,8 +88,8 @@ For testing purposes:
 ##### 4.6.2 Client scopes -> profile -> Mappers -> add mapper -> By configuration -> User Attribute:
 ```
 Name:			subordinates
-User Attribute:		subordinates
-Token Claim Name:	subordinates
+User Attribute:		    subordinates
+Token Claim Name:	    subordinates
 Add to ID token:      	ON
 Add to access token:  	ON
 Add to userinfo:      	ON
