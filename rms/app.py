@@ -141,6 +141,14 @@ def update_status(id):
     db.session.commit()
     return redirect("/")
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(
+        "http://iam.local/realms/iam-project/protocol/openid-connect/logout"
+        "?post_logout_redirect_uri=http://rms.local/"
+        "&client_id=rms")
+
 @app.context_processor
 def inject_auth_checks():
     return {

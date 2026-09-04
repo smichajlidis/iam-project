@@ -10,7 +10,8 @@
 <body>
     <div class="header">
         <h1>Request Management System</h1>
-        <p>Logged in as {{ auth.get_name() }}</p>
+        <p style="text-align: right">Logged in as {{ auth.get_name() }}<br>
+        <a href="/logout">Logout</a></input></p>
     </div>
     {% block body %}{% endblock %}
 </body>
