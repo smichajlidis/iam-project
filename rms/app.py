@@ -134,7 +134,7 @@ def update(id):
 def update_status(id):
     request_to_update = Request.query.get_or_404(id)
 
-    if (checks.can_change_status_support_scope(request_to_update) and checks.can_change_status_manager_scope(request_to_update)):
+    if not (checks.can_change_status_support_scope(request_to_update) or checks.can_change_status_manager_scope(request_to_update)):
         return f"Forbidden, {request_to_update.requestor}", 403
 
     request_to_update.status = request.form["status"]
