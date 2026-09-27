@@ -8,12 +8,12 @@ from auth import checks
 
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
-app.config['SQLALCHEMY_DATABASE_URI'] = ("postgresql://rms:rms@postgres:5432/rms_db")
+app.config['SQLALCHEMY_DATABASE_URI'] = ("postgresql+psycopg2://rms:rms@postgres:5432/rms_db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'dev-secret'
 
 CLIENT_ID = "rms"
-REDIRECT_URI = "http://rms.local/callback"
+REDIRECT_URI = "http://192.168.0.102:8081/callback"
 
 db = SQLAlchemy(app)
 
@@ -54,7 +54,7 @@ def index():
 @app.route('/login')
 def login():
     auth_url = (
-            f"http://iam.local/realms/iam-project/protocol/openid-connect/auth"
+            f"http://192.168.0.102:8080/realms/iam-project/protocol/openid-connect/auth"
             f"?client_id={CLIENT_ID}"
             f"&redirect_uri={REDIRECT_URI}"
             f"&response_type=code"
@@ -145,8 +145,8 @@ def update_status(id):
 def logout():
     session.clear()
     return redirect(
-        "http://iam.local/realms/iam-project/protocol/openid-connect/logout"
-        "?post_logout_redirect_uri=http://rms.local/"
+        "http://192.168.0.102:8080/realms/iam-project/protocol/openid-connect/logout"
+        "?post_logout_redirect_uri=http://192.168.0.102:8081/"
         "&client_id=rms")
 
 @app.context_processor
